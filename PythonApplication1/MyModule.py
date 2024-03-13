@@ -1,12 +1,35 @@
-﻿def register(username, password, user_data):
-    """Регистрирует нового пользователя.
+import random
+import string
+def generate_password_auto():
+    """позволяет пользивателю создать пароль автоматически
+    
+    """
+    special_chars = ".,:;!_*-+()/#¤%&"
+    digits = '0123456789'
+    lowercase_letters = 'qwertyuiopasdfghjklzxcvbnm'
+    uppercase_letters = string.ascii_uppercase
+    password_list = list(special_chars + digits + lowercase_letters + uppercase_letters)
+    random.shuffle(password_list)
+    password = ''.join([random.choice(password_list) for _ in range(12)])
+    return password
+def generate_password_manual():
+    """позволяет пользивателю создать пароль в ручную
 
     """
-    if username in user_data:
-        print("Пользователь с таким логином уже существует")
-    else:
-        user_data[username]=password
-        print("Пользователь успешно зарегистрирован")
+    while True:
+        password = input("Enter a password: ")
+        if not any(char.isdigit() for char in password):
+            print("Password must contain at least one digit.")
+            continue
+        if not any(char.islower() for char in password):
+            print("Password must contain at least one lowercase letter.")
+            continue
+        if not any(char.isupper() for char in password):
+            print("Password must contain at least one uppercase letter.")
+            continue
+        if not any(char in string.punctuation for char in password):
+            print("Password must contain at least one special character.")
+            continue
 
 def login(username, password, user_data):
     """Авторизует пользователя.
