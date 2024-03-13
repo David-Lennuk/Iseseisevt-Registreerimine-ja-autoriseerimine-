@@ -1,20 +1,31 @@
 ﻿from MyModule import *
-
+registered_users = {"Anton": "Mark5527", "Erik": "Tanki2"}
 
 while True:
     print("\n1-Регистрация\n2-Авторизация\n3-Изменение пароля\n4-Восстановление забытого пароля\n5-Прекращение")
 
     choice=input("Выберите действие: ")
 
-    if choice=="1":
-        username=input("Введите логин: ")
-        password=input("Введите пароль: ")
-        print(username, password)
+  if choice == "1":
+        username = input("Введите имя пользователя: ")
+        if username in registered_users:
+            print("Имя пользователя уже занято. Пожалуйста, выберите другое имя пользователя.")
+            continue
+        password_choice = input("Хотите ли вы создать пароль автоматически (авто) или вручную (вручную): ")
+        if password_choice == "авто":
+            password = MyModule.generate_password_auto()
+        elif password_choice == "вручную":
+            password = MyModule.generate_password_manual()
+        registered_users[username] = password
+        print("Пользователь успешно зарегистрирован.")
 
     elif choice=="2":
-        username=input("Введите логин: ")
-        password=input("Введите пароль: ")
-        print(username, password)
+        username = input("Enter username: ")
+        password = input("Enter password: ")
+        if username in registered_users and registered_users[username] == password:
+            print("Авторизация прошла успешно.")
+        else:
+            print("Неверное имя пользователя или пароль.")
 
     elif choice=="3":
         username=input("Введите логин: ")
