@@ -1,12 +1,29 @@
 import random
 import smtplib, ssl
-def load_passwords_and_logs(file, names, passwords):
+def save_ole(new_username, new_password, new_email, konto):
+    save =f"{new_username}:{new_password}|{new_email}"#Lura sdkjgfhsd email 
+    with open (konto, "a") as f:
+        f.write(f"{save}\n")
+def load_passwords_and_logs(file, names, passwords, emails):
     with open(file, 'r') as f:
         data = f.readlines()
         for line in data:
-            parts = line.strip().split(',')
-            names.append(parts[0])
-            passwords.append(parts[1])
+            name_password_and_email = line.strip().split('|')
+            email = name_password_and_email[1]
+            name_and_password = name_password_and_email[0].split(":")
+            name = name_and_password[0]
+            password = name_and_password[1]
+            names.append(name)
+            passwords.append(password)
+            emails.append(email)
+def clear_file(konto):
+    with open(konto, "w") as f:
+        f.write("")
+def rewrite(konto, names, passwords, emails):
+    clear_file(konto)
+    for index,i in enumerate(names):
+        print(names, passwords, emails)
+        save_ole(i, passwords[index], emails[index], konto)
 def generate_password():
     str0 = ".,:;!_*-+()/#¤%&"
     str1 = '0123456789'
@@ -27,6 +44,7 @@ def register_user(names, passwords, emails, new_username, new_password, new_emai
     names.append(new_username)
     passwords.append(new_password)
     emails.append(new_email)
+    save_ole(new_username, new_password, new_email, "konto.txt")
     print("User registered successfully.")
 def authorize_user(names, passwords, entered_username, entered_password, entered_email, emails):
     if entered_username in names:
