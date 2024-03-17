@@ -5,9 +5,13 @@ from MyMoodul import *
 names = []
 passwords = []
 emails = []
+load_passwords_and_logs("konto.txt", names, passwords, emails)
 while True:
     print("\n0-Show accounts\n1-Registration\n2-Authorization\n3-Change credentials\n4-Recover password\n5-Quit")
+
     choice = input("Choose an action: ")
+    if choice == "0":
+        print(f"{names}\n{passwords}\n{emails}")
     if choice == "1":
         new_username = input("Enter new username: ")
         new_email = input("Enter email: ")
@@ -22,10 +26,7 @@ while True:
             while not check_password_requirements(new_password):
                 print("Password requirements not met. Please try again.")
                 new_password = input("Enter password: ")
-                
-        names.append(new_username)
-        passwords.append(new_password)
-        emails.append(new_email)
+        register_user(names, passwords, emails, new_username, new_password, new_email)
         print("User registered successfully.")
     elif choice == "2":
         username = input("Enter username: ")
@@ -47,6 +48,7 @@ while True:
                 print("Password requirements not met. Please try again.")
                 new_password = input("Enter new password: ")
             passwords[index] = new_password
+            rewrite("konto.txt", names, passwords, emails)
             print("Password changed successfully.")
         else:
             print("Username not found.")
@@ -56,6 +58,7 @@ while True:
             index = emails.index(email)
             new_password = generate_password()
             passwords[index] = new_password
+            rewrite("konto.txt", names, passwords, emails)
             send_password_email(email, new_password)
             print(f"New password sent to {email}")
         else:
