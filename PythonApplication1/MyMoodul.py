@@ -1,10 +1,14 @@
 import random
 import smtplib, ssl
 def save_ole(new_username, new_password, new_email, konto):
-    save =f"{new_username}:{new_password}|{new_email}"#Lura sdkjgfhsd email 
+    """принимает новое имя пользователя, новый пароль, новый адрес электронной почты и имя файла, в который нужно сохранить эту информацию.
+    """
+    save =f"{new_username}:{new_password}|{new_email}"
     with open (konto, "a") as f:
         f.write(f"{save}\n")
 def load_passwords_and_logs(file, names, passwords, emails):
+    """читает содержимое файла, разделенного символом "|", и загружает имена, пароли и адреса электронной почты из каждой строки в соответствующие списки.
+    """
     with open(file, 'r') as f:
         data = f.readlines()
         for line in data:
@@ -17,14 +21,20 @@ def load_passwords_and_logs(file, names, passwords, emails):
             passwords.append(password)
             emails.append(email)
 def clear_file(konto):
+    """принимает имя файла (konto) и очищает его содержимое.
+    """
     with open(konto, "w") as f:
         f.write("")
 def rewrite(konto, names, passwords, emails):
+    """использует две другие функции, clear_file() и save_ole(), для перезаписи содержимого файла.
+    """
     clear_file(konto)
     for index,i in enumerate(names):
         print(names, passwords, emails)
         save_ole(i, passwords[index], emails[index], konto)
 def generate_password():
+    """генерирует случайный пароль.
+    """
     str0 = ".,:;!_*-+()/#¤%&"
     str1 = '0123456789'
     str2 = 'qwertyuiopasdfghjklzxcvbnm'
@@ -35,18 +45,24 @@ def generate_password():
     psword = ''.join([random.choice(ls) for x in range(12)])
     return psword
 def check_password_requirements(password):
+    """проверяет, соответствует ли переданный пароль всем требованиям безопасности, включая наличие цифр, строчных и заглавных букв, а также специальных символов.
+    """
     has_digit = any(char.isdigit() for char in password)
     has_lower = any(char.islower() for char in password)
     has_upper = any(char.isupper() for char in password)
     has_special = any(char in "!@#$%^&*()" for char in password)
     return has_digit and has_lower and has_upper and has_special
 def register_user(names, passwords, emails, new_username, new_password, new_email):
+    """предназначена для регистрации нового пользователя в системе.
+    """
     names.append(new_username)
     passwords.append(new_password)
     emails.append(new_email)
     save_ole(new_username, new_password, new_email, "konto.txt")
     print("User registered successfully.")
 def authorize_user(names, passwords, entered_username, entered_password, entered_email, emails):
+    """предназначена для авторизации пользователя в системе. 
+    """
     if entered_username in names:
         index = names.index(entered_username)
         if passwords[index] == entered_password and emails[index] == entered_email:
@@ -56,6 +72,8 @@ def authorize_user(names, passwords, entered_username, entered_password, entered
     else:
         print("User not found. Please register.")
 def change_user_credentials(operation, names, passwords, emails, current_username, new_username, new_password, new_email):
+    """позволяет изменить учетные данные пользователя в системе.
+    """
     if operation == "username":
         if current_username in names:
             index = names.index(current_username)
@@ -80,6 +98,8 @@ def change_user_credentials(operation, names, passwords, emails, current_usernam
     else:
         print("Invalid operation. Please choose 'username', 'password', or 'email'.")
 def recover_password(names, passwords, emails, entered_username):
+    """предназначена для восстановления пароля пользователя на основе введенного имени пользователя.
+    """
     if entered_username in names:
         index = names.index(entered_username)
         print(f"Your password is: {passwords[index]}. Please remember it.")
@@ -87,6 +107,8 @@ def recover_password(names, passwords, emails, entered_username):
         print("User not found. Please register.")
     
 def send_password_email(to_email, parool):
+    """предназначена для отправки электронного письма с паролем пользователю на указанный адрес электронной почты.
+    """
     from email.message import EmailMessage
     smtp_server = "smtp.gmail.com"
     port = 587
